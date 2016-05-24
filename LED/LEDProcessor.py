@@ -68,13 +68,12 @@ class LEDBlock:
         DIN = GPIO.gpio_id(dinpin)
         CS = GPIO.gpio_id(cspin)
         CLK = GPIO.gpio_id(clkpin)
+        global pins
         pins = (
             (DIN, 'out'),
             (CS, 'out'),
             (CLK, 'out')
         )
-        global gpio
-        gpio = GPIO(pins)
         global numOfDevices
         numOfDevices = devices
         for i in range(0,numOfDevices):
@@ -108,20 +107,21 @@ class LEDBlock:
 
     def transferInstruction(self, device, instruction):
         '''Shifts in the instructions'''
-        gpio.digital_write(DIN, GPIO.LOW)
-        gpio.digital_write(CLK, GPIO.LOW)
-        gpio.digital_write(CS, GPIO.LOW)
-        for j in range(0, numOfDevices):
-            bitmask = 0x8000
-            for i in range(0, 16):
-                gpio.digital_write(CLK, GPIO.LOW)
-                if instruction[j] & bitmask == bitmask:
-                    gpio.digital_write(DIN, GPIO.HIGH)
-                else:
-                    gpio.digital_write(DIN, GPIO.LOW)
-                CLK.high()
-                bitmask = bitmask >> 1
-        gpio.digital_write(CS, GPIO.HIGH)
+        with GPIO(pins) as gpio:
+            gpio.digital_write(DIN, GPIO.LOW)
+            gpio.digital_write(CLK, GPIO.LOW)
+            gpio.digital_write(CS, GPIO.LOW)
+            for j in range(0, numOfDevices):
+                bitmask = 0x8000
+                for i in range(0, 16):
+                    gpio.digital_write(CLK, GPIO.LOW)
+                    if instruction[j] & bitmask == bitmask:
+                        gpio.digital_write(DIN, GPIO.HIGH)
+                    else:
+                        gpio.digital_write(DIN, GPIO.LOW)
+                    CLK.high()
+                    bitmask = bitmask >> 1
+            gpio.digital_write(CS, GPIO.HIGH)
 
 
     def setRow(self, row, data, device=1):

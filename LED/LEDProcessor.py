@@ -60,22 +60,16 @@ class LEDBlock:
     global TOTAL
     TOTAL = 0xFF
 
-    def __init__(self, devices=1, dinpin='GPIO-E', cspin='GPIO-D', clkpin='GPIO-C', intensity=5, scanlimit=7):
+    def __init__(self, gpio_in, devices=1, dinpin='GPIO-E', cspin='GPIO-D', clkpin='GPIO-C', intensity=5, scanlimit=7):
         """Constructor"""
+        global gpio
+        gpio = gpio_in
         global DIN
         global CS
         global CLK
-        print 'construcring ledblock'
         DIN = GPIO.gpio_id(dinpin)
         CS = GPIO.gpio_id(cspin)
         CLK = GPIO.gpio_id(clkpin)
-        global pins
-        print DIN
-        pins = (
-            (DIN, 'out'),
-            (CS, 'out'),
-            (CLK, 'out')
-        )
         global numOfDevices
         numOfDevices = devices
         for i in range(0,numOfDevices):
@@ -109,21 +103,20 @@ class LEDBlock:
 
     def transferInstruction(self, device, instruction):
         '''Shifts in the instructions'''
-        with GPIO(pins) as gpio:
-            gpio.digital_write(DIN, GPIO.LOW)
-            gpio.digital_write(CLK, GPIO.LOW)
-            gpio.digital_write(CS, GPIO.LOW)
-            for j in range(0, numOfDevices):
-                bitmask = 0x8000
-                for i in range(0, 16):
-                    gpio.digital_write(CLK, GPIO.LOW)
-                    if instruction[j] & bitmask == bitmask:
-                        gpio.digital_write(DIN, GPIO.HIGH)
-                    else:
-                        gpio.digital_write(DIN, GPIO.LOW)
-                    gpio.digital_write(CLK, GPIO.HIGH)
-                    bitmask = bitmask >> 1
-            gpio.digital_write(CS, GPIO.HIGH)
+        gpio.digital_write(DIN, GPIO.LOW)
+        gpio.digital_write(CLK, GPIO.LOW)
+        gpio.digital_write(CS, GPIO.LOW)
+        for j in range(0, numOfDevices):
+            bitmask = 0x8000
+            for i in range(0, 16):
+                gpio.digital_write(CLK, GPIO.LOW)
+                if instruction[j] & bitmask == bitmask:
+                    gpio.digital_write(DIN, GPIO.HIGH)
+                else:
+                    gpio.digital_write(DIN, GPIO.LOW)
+                gpio.digital_write(CLK, GPIO.HIGH)
+                bitmask = bitmask >> 1
+        gpio.digital_write(CS, GPIO.HIGH)
 
 
     def setRow(self, row, data, device=1):

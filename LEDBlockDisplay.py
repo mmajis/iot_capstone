@@ -2,6 +2,7 @@
 import time
 from LED.LEDProcessor import LEDBlock
 import Adafruit_DHT
+from gpio_96boards import GPIO
 
 LED_SCROLL_PAUSE = 0.2
 
@@ -28,32 +29,47 @@ def led_print(text):
 
 
 if __name__ == '__main__':
-    numOfDevices = 2
-    led = LEDBlock(numOfDevices)
+    global DIN
+    global CS
+    global CLK
+    DIN = GPIO.gpio_id('GPIO-E')
+    CS = GPIO.gpio_id('GPIO-D')
+    CLK = GPIO.gpio_id('GPIO-C')
+    global pins
+    print DIN
+    pins = (
+        (DIN, 'out'),
+        (CS, 'out'),
+        (CLK, 'out')
+    )
 
-    # Sensor should be set to Adafruit_DHT.DHT11,
-    # Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302.
-    sensor = Adafruit_DHT.DHT22
+    with GPIO(pins) as gpio:
+        numOfDevices = 2
+        led = LEDBlock(gpio, numOfDevices, 'GPIO-E', 'GPIO-D', 'GPIO-C')
 
-    # Example using a Beaglebone Black with DHT sensor
-    # connected to pin P8_11.
-    # pin = 'P8_11'
+        # Sensor should be set to Adafruit_DHT.DHT11,
+        # Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302.
+        sensor = Adafruit_DHT.DHT22
 
-    # Example using a Raspberry Pi with DHT sensor
-    # connected to GPIO23.
-    pin = 23
+        # Example using a Beaglebone Black with DHT sensor
+        # connected to pin P8_11.
+        # pin = 'P8_11'
 
-    # Try to grab a sensor reading.  Use the read_retry method which will retry up
-    # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
-    #humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-    led_print ('h %s t %s' % (1, 2))
+        # Example using a Raspberry Pi with DHT sensor
+        # connected to GPIO23.
+        pin = 23
 
-    # Note that sometimes you won't get a reading and
-    # the results will be null (because Linux can't
-    # guarantee the timing of calls to read the sensor).
-    # If this happens try again!
-    #if humidity is not None and temperature is not None:
-    #    print('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
-    #    led_print('T %s H %s' % (temperature, humidity))
-    #else:
-    #    print('Failed to get reading. Try again!')
+        # Try to grab a sensor reading.  Use the read_retry method which will retry up
+        # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
+        #humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+        led_print ('h %s t %s' % (1, 2))
+
+        # Note that sometimes you won't get a reading and
+        # the results will be null (because Linux can't
+        # guarantee the timing of calls to read the sensor).
+        # If this happens try again!
+        #if humidity is not None and temperature is not None:
+        #    print('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
+        #    led_print('T %s H %s' % (temperature, humidity))
+        #else:
+        #    print('Failed to get reading. Try again!')

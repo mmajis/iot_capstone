@@ -16,8 +16,8 @@ if __name__ == '__main__':
     numOfDevices = 2
     led = LEDBlock(numOfDevices)
     print 'koo'
-    led.printLetter(' ', True, 1)
-    led.printLetter(string[i], True, 2)
+    led.printLetter('A', True, 1)
+    led.printLetter('B', True, 2)
     time.sleep(LED_SCROLL_PAUSE)
 
     # Sensor should be set to Adafruit_DHT.DHT11,

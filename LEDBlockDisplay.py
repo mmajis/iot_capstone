@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import time
-from LEDProcessor import LEDBlock
+from LED.LEDProcessor import LEDBlock
 from gpio_96boards import GPIO
 import Adafruit_DHT
 
@@ -12,12 +12,17 @@ pins = (
 LED_SCROLL_PAUSE = 0.2
 
 if __name__ == '__main__':
+    print 'jeejee'
     numOfDevices = 2
     led = LEDBlock(numOfDevices)
+    print 'koo'
+    led.printLetter(' ', True, 1)
+    led.printLetter(string[i], True, 2)
+    time.sleep(LED_SCROLL_PAUSE)
 
     # Sensor should be set to Adafruit_DHT.DHT11,
     # Adafruit_DHT.DHT22, or Adafruit_DHT.AM2302.
-    sensor = Adafruit_DHT.DHT22
+    #sensor = Adafruit_DHT.DHT22
 
     # Example using a Beaglebone Black with DHT sensor
     # connected to pin P8_11.
@@ -29,7 +34,8 @@ if __name__ == '__main__':
 
     # Try to grab a sensor reading.  Use the read_retry method which will retry up
     # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
-    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+    #humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+    print 'h %s t %s' % (1, 2)
 
     # Note that sometimes you won't get a reading and
     # the results will be null (because Linux can't

@@ -65,10 +65,12 @@ class LEDBlock:
         global DIN
         global CS
         global CLK
+        print 'construcring ledblock'
         DIN = GPIO.gpio_id(dinpin)
         CS = GPIO.gpio_id(cspin)
         CLK = GPIO.gpio_id(clkpin)
         global pins
+        print DIN
         pins = (
             (DIN, 'out'),
             (CS, 'out'),

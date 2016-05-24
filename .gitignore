@@ -1,3 +1,4 @@
 *.box
 .DS_Store
 .vagrant
+*.pyc

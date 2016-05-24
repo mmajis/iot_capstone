@@ -121,7 +121,7 @@ class LEDBlock:
                         gpio.digital_write(DIN, GPIO.HIGH)
                     else:
                         gpio.digital_write(DIN, GPIO.LOW)
-                    CLK.high()
+                    gpio.digital_write(CLK, GPIO.HIGH)
                     bitmask = bitmask >> 1
             gpio.digital_write(CS, GPIO.HIGH)
 

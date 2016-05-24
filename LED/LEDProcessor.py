@@ -60,7 +60,7 @@ class LEDBlock:
     global TOTAL
     TOTAL = 0xFF
 
-    def __init__(self, dinpin='GPIO-E', cspin='GPIO-D', clkpin='GPIO-C', devices=1, intensity=5, scanlimit=7):
+    def __init__(self, devices=1, dinpin='GPIO-E', cspin='GPIO-D', clkpin='GPIO-C', intensity=5, scanlimit=7):
         """Constructor"""
         global DIN
         global CS

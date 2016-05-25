@@ -50,6 +50,9 @@ pin = 23
 # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
 humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
+#humidity = 50
+#temperature = 40
+
 # Note that sometimes you won't get a reading and
 # the results will be null (because Linux can't
 # guarantee the timing of calls to read the sensor).
@@ -57,10 +60,10 @@ humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 if humidity is not None and temperature is not None:
     print('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
     with open('sensordata.json', 'w') as datafile:
-        datafile.write('{"t": %d, "h": %d, "time": %s}' % (temperature, humidity, datetime.datetime.now().isoformat()))
+        datafile.write('{"t": %.1f, "h": %.1f, "time": "%s"}' % (temperature, humidity, datetime.datetime.now().isoformat()))
     with open('settings.json', 'r') as settingsfile:
         settings = json.load(settingsfile)
-        message = None
+        message = ""
         if temperature > settings['temperature_threshold']:
             message += "Temperature %d exceeds threshold %d\n\n" % (temperature, settings['temperature_threshold'])
         if humidity > settings['humidity_threshold']:

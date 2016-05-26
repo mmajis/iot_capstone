@@ -1,5 +1,1 @@
-{
-  "temperature_threshold": 26.0,
-  "humidity_threshold": 31.0,
-  "recipients": ["mika.majakorpi@iki.fi", "rashmi.kasat@gmail.com"]
-}
+{"motion_detection": true, "temperature_threshold": 26.5,"humidity_threshold": 32.0,"recipients": ["mika.majakorpi@iki.fi","rashmi.kasat@gmail.com"]}

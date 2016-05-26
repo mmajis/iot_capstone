@@ -16,7 +16,8 @@ import SimpleCV
 import socket
 
 
-def send_email(recipients, subject, message, img_data):
+def send_email(recipients, subject, message, img_path):
+    img_data = open(img_path, 'rb').read()
     try:
         pwd = None
         with open('secrets.json', 'r') as secretsfile:
@@ -43,10 +44,11 @@ def send_email(recipients, subject, message, img_data):
 
 pin = GPIO.gpio_id('GPIO-B')
 pins = (
-    (pin, 'in')
+    (pin, 'in'),
 )
 cam = SimpleCV.Camera()
 last_detection = False
+IMAGE_PATH = "/home/linaro/motion_detection.png"
 
 with GPIO(pins) as gpio:
     while True:
@@ -61,12 +63,12 @@ with GPIO(pins) as gpio:
                 if pinValue:
                     print ("Motion detected!")
                     img = cam.getImage()
-                    img.save("/home/linaro/motion_detection.png")
+                    img.save(IMAGE_PATH)
                     send_email(
                             data['recipients'],
                             "Motion detected!",
                             "Motion was detected, see image attachment!",
-                            img)
+                            IMAGE_PATH)
                     last_detection = True
                 else:
                     if last_detection:

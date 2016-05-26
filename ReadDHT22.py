@@ -12,28 +12,32 @@ import json
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import socket
 
 
 
 def send_email(recipients, subject, message):
-    pwd = None
-    with open('secrets.json', 'r') as secretsfile:
-        secrets = json.load(secretsfile)
-        pwd = secrets['smtp_pwd']
+    try:
+        pwd = None
+        with open('secrets.json', 'r') as secretsfile:
+            secrets = json.load(secretsfile)
+            pwd = secrets['smtp_pwd']
 
-    fromaddr = "mmajis@gmail.com"
-    msg = MIMEMultipart()
-    msg['From'] = fromaddr
-    msg['To'] = ", ".join(recipients)
-    msg['Subject'] = subject
-    msg.attach(MIMEText(message, 'plain'))
+        fromaddr = "mmajis@gmail.com"
+        msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = ", ".join(recipients)
+        msg['Subject'] = subject
+        msg.attach(MIMEText(message, 'plain'))
 
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(fromaddr, pwd)
-    text = msg.as_string()
-    server.sendmail(fromaddr, recipients, text)
-    server.quit()
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(fromaddr, pwd)
+        text = msg.as_string()
+        server.sendmail(fromaddr, recipients, text)
+        server.quit()
+    except socket.gaierror:
+        print("Network down, can't send email...")
 
 while True:
 

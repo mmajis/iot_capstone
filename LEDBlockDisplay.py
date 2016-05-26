@@ -10,7 +10,7 @@ def led_print_text(text):
     string = text.upper()
     try:
         for i in range(0, len(string)):
-                led.printLetter(string[i], True, 1)
+                led.printLetter(string[i], False, 1)
                 time.sleep(LED_SCROLL_PAUSE)
     finally:
         led.clearDisplays()
@@ -20,7 +20,7 @@ def led_print_numbers(numbers):
     numbers = str(numbers)
     try:
         for i in range(0, len(numbers)):
-            led.printNumber(numbers[i], True, 1)
+            led.printNumber(numbers[i], False, 1)
             time.sleep(LED_SCROLL_PAUSE)
     finally:
         led.clearDisplays()
@@ -43,16 +43,40 @@ if __name__ == '__main__':
     )
 
     with GPIO(pins) as gpio:
-        numOfDevices = 1
+        numOfDevices = 2
         led = LEDBlock(gpio, numOfDevices, 'GPIO-E', 'GPIO-D', 'GPIO-C')
         while 1 is 1:
             with open('sensordata.json', 'r') as datafile:
                 sensordata = json.load(datafile)
-                led.printLetter('T')
+                print(str(sensordata['t']) + ' ' + str(sensordata['h']))
+                led.printLetter('T', False, 2)
+                led.printLetter('T', False, 1)
                 time.sleep(1)
-                led.printNumber(sensordata['t'])
+                print_arr = str(round(sensordata['t'])).split('.')
+                led.printNumber(print_arr[0][0], 1)
+                led.printNumber(print_arr[0][1], 2)
                 time.sleep(1)
-                led.printLetter('H')
+                # for i in print_arr[0]:
+                #     led.printNumber(i, 1)
+                #     time.sleep(1)
+                # led.printDice(1, 1)
+                # time.sleep(1)
+                # for i in print_arr[1]:
+                #     led.printNumber(i, 1)
+                #     time.sleep(1)
+                led.printLetter('H', False, 2)
+                led.printLetter('H', False, 1)
                 time.sleep(1)
-                led.printNumber(sensordata['h'])
+                print_arr = str(round(sensordata['h'])).split('.')
+                led.printNumber(print_arr[0][0], 1)
+                led.printNumber(print_arr[0][1], 2)
+                time.sleep(1)
+                # for i in print_arr[0]:
+                #     led.printNumber(i, 1)
+                #     time.sleep(1)
+                # led.printDice(1, 1)
+                # time.sleep(1)
+                # for i in print_arr[1]:
+                #     led.printNumber(i, 1)
+                #     time.sleep(1)
 

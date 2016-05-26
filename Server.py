@@ -37,4 +37,6 @@ rootResponse = """
 
 if __name__ == '__main__':
     # cherrypy.tree.mount(ConfigGet(), '/config')
+    cherrypy.server.socket_host = '0.0.0.0'
+    # cherrypy.server.socket_port = 80
     cherrypy.quickstart(Root(), '/')

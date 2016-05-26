@@ -18,7 +18,8 @@ class ConfigGet(object):
     def index(self):
         with open('settings.json', 'r') as datafile:
             data = json.load(datafile)
-            return configGetResponse % (data['temperature_threshold'], data['humidity_threshold'], ' '.join(data['recipients']))
+            motionEnable = 'checked' if data['motion_detection'] else ''
+            return configGetResponse % (data['temperature_threshold'], data['humidity_threshold'], motionEnable, ' '.join(data['recipients']))
 
 
 class ConfigSet(object):
@@ -32,8 +33,9 @@ class ConfigSet(object):
             recipients += '"' + rec + '",'
         recipients = recipients[:-1]
         recipients += ']'
+        motionEnable = 'true' if ('motion_detection' in params.keys()) else 'false'
         with open('settings.json', 'w') as datafile:
-            datafile.write('{"temperature_threshold": %.1f,"humidity_threshold": %.1f,"recipients": %s}' % (float(params['temperature_threshold']), float(params['humidity_threshold']), recipients))
+            datafile.write('{"motion_detection": %s,"temperature_threshold": %.1f,"humidity_threshold": %.1f,"recipients": %s}' % (motionEnable, float(params['temperature_threshold']), float(params['humidity_threshold']), recipients))
         raise cherrypy.HTTPRedirect("/")
 
 rootResponse = """<!DOCTYPE html>
@@ -60,7 +62,9 @@ configGetResponse = """<!DOCTYPE html>
         <input id="temperature_threshold" name="temperature_threshold" type="text" value="%s">
     <h1>Humidity Alert Threshold</h1>
         <input id="humidity_threshold" name="humidity_threshold" type="text" value="%s">
-    <h3>Alert email recipients</h3>
+    <h1>Motion detection</h1>
+        <input type="checkbox" id="motion_detection" name="motion_detection" value="True" %s> Motion detection
+    <h1>Alert email recipients</h1>
         <input id="recipients" name="recipients" type="text" value="%s" size="50">
         <input type="submit" value="Submit">
 </form>

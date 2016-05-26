@@ -72,9 +72,9 @@ while True:
             settings = json.load(settingsfile)
             message = ""
             if temperature > settings['temperature_threshold']:
-                message += "Temperature %d exceeds threshold %d\n\n" % (temperature, settings['temperature_threshold'])
+                message += "Temperature %.1f exceeds threshold %.1f\n\n" % (temperature, settings['temperature_threshold'])
             if humidity > settings['humidity_threshold']:
-                message += "Humidity %d exceeds threshold %d\n\n" % (humidity, settings['humidity_threshold'])
+                message += "Humidity %.1f exceeds threshold %.1f\n\n" % (humidity, settings['humidity_threshold'])
             if message is not None:
                 send_email(settings['recipients'], "Sensor alert!", message)
 

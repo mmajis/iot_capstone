@@ -47,7 +47,7 @@ pins = (
     (pin, 'in'),
 )
 cam = SimpleCV.Camera()
-last_detection = False
+last_detection = True
 IMAGE_PATH = "/home/linaro/motion_detection.png"
 
 with GPIO(pins) as gpio:

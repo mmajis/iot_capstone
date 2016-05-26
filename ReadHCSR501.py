@@ -48,6 +48,7 @@ pins = (
 )
 cam = SimpleCV.Camera()
 last_detection = True
+detection_enabled = True
 IMAGE_PATH = "/home/linaro/motion_detection.png"
 
 with GPIO(pins) as gpio:
@@ -56,9 +57,15 @@ with GPIO(pins) as gpio:
         with open('settings.json', 'r') as settingsfile:
             data = json.load(settingsfile)
             if not data['motion_detection']:
-                time.sleep(10)
+                if detection_enabled:
+                    print ("Motion detection is disabled")
+                    detection_enabled = False
+                time.sleep(2)
                 continue
             else:
+                if not detection_enabled:
+                    print("Motion detection is enabled")
+                    detection_enabled = True
                 pinValue = gpio.digital_read(pin)
                 if pinValue:
                     print ("Motion detected!")
@@ -70,8 +77,9 @@ with GPIO(pins) as gpio:
                             "Motion was detected, see image attachment!",
                             IMAGE_PATH)
                     last_detection = True
+                    sleep(10)
                 else:
                     if last_detection:
                         last_detection = False
                         print ("No motion detected...")
-                    time.sleep(10)
+                    time.sleep(0.5)
